@@ -28,3 +28,59 @@ This project uses a PostgreSQL database with PostGIS extension for spatial data.
 
     ```bash
     docker compose down -v
+
+## Mushroom Spots API
+
+This is a RESTful Spring Boot application for managing mushroom picking spots. Spots are stored as GeoJSON Point features and support basic CRUD operations.
+
+### Features
+- Add new mushroom spots with a description and coordinates 
+- Retrieve all spots (GeoJSON format)
+- Retrieve a single spot by ID 
+- Update an existing spot 
+- Delete a spot 
+- Validation and custom exception handling 
+
+### API endpoints
+
+GET /mushroomspots
+Response: `200 OK`
+Returns a list of GeoJSON Feature objects.
+
+GET /mushroomspots/{id}
+Response: `200 OK`
+Returns the retrieved spot in GeoJSON format.
+Error: `404 Not Found` if the spot doesn't exist.
+
+POST /mushroomspots
+Request Body (JSON):
+```json
+{
+"description": "Kuuseriisikad",
+  "latitude": 57.434,
+  "longitude": 26.745
+}
+```
+Response: `201 Created`
+Returns the created spot in GeoJSON format.
+Error: `400 Bad Request` if input is invalid.
+
+PUT /mushroomspots/{id}
+Request Body (JSON):
+```json
+{
+"description": "Updated description",
+  "latitude": 57.434,
+  "longitude": 26.745
+}
+```
+Response: `200 OK`
+Returns the updated spot in GeoJSON format.
+Error: `400 Bad Request` if input is invalid.
+Error: `404 Not Found` if the spot with given ID doesn't exist.
+
+DELETE /mushroomspots/{id}
+Response: `204 No Content`
+Error: `404 Not Found` if the spot with given ID doesn't exist.
+
+

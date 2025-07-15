@@ -3,8 +3,6 @@ import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "mushroom_spot")
 public class MushroomSpot {
