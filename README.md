@@ -1,13 +1,13 @@
-## 🐘 Setting up the PostgreSQL + PostGIS database
+## Setting up the PostgreSQL + PostGIS database
 
 This project uses a PostgreSQL database with PostGIS extension for spatial data. The database is started via Docker using the provided `docker-compose.yml` file.
 
-### 📦 Prerequisites
+### Prerequisites
 
 - Docker installed and running
 - DBeaver (or another SQL client, optional)
 
-### 🚀 How to start the database
+### How to start the database
 
 1. Start the database container:
 
@@ -17,7 +17,7 @@ This project uses a PostgreSQL database with PostGIS extension for spatial data.
 2. Run the Spring Boot application to auto-create the mushroom_spot table from schema.sql and insert sample data 
    from data.sql.
 
-### 🚀 How to stop the database (when necessary)
+### How to stop the database (when necessary)
 
 1. To stop the container:
 
