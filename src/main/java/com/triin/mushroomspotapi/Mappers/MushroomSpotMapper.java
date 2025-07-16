@@ -1,8 +1,8 @@
-package com.triin.mushroom_spots_api.Mappers;
+package com.triin.mushroomspotapi.Mappers;
 
-import com.triin.mushroom_spots_api.DTOs.MushroomSpotCreateDto;
-import com.triin.mushroom_spots_api.DTOs.MushroomSpotGeoJsonDto;
-import com.triin.mushroom_spots_api.Entities.MushroomSpot;
+import com.triin.mushroomspotapi.DTOs.MushroomSpotCreateDto;
+import com.triin.mushroomspotapi.DTOs.MushroomSpotGeoJsonDto;
+import com.triin.mushroomspotapi.Entities.MushroomSpot;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;

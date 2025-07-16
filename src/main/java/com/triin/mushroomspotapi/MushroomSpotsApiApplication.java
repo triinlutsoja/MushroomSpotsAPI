@@ -1,4 +1,4 @@
-package com.triin.mushroom_spots_api;
+package com.triin.mushroomspotapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

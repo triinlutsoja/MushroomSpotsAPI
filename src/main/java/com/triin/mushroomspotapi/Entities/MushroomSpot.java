@@ -1,7 +1,9 @@
-package com.triin.mushroom_spots_api.Entities;
+package com.triin.mushroomspotapi.Entities;
 import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "mushroom_spot")
@@ -38,5 +40,26 @@ public class MushroomSpot {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "MushroomSpot{" +
+                "id=" + id +
+                ", coordinates=" + coordinates +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof MushroomSpot that)) return false;
+
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

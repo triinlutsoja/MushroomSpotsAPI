@@ -1,8 +1,8 @@
-package com.triin.mushroom_spots_api.Controllers;
+package com.triin.mushroomspotapi.Controllers;
 
-import com.triin.mushroom_spots_api.DTOs.MushroomSpotCreateDto;
-import com.triin.mushroom_spots_api.DTOs.MushroomSpotGeoJsonDto;
-import com.triin.mushroom_spots_api.Services.MushroomSpotService;
+import com.triin.mushroomspotapi.DTOs.MushroomSpotCreateDto;
+import com.triin.mushroomspotapi.DTOs.MushroomSpotGeoJsonDto;
+import com.triin.mushroomspotapi.Services.MushroomSpotService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +23,6 @@ public class MushroomSpotController {
     public ResponseEntity<List<MushroomSpotGeoJsonDto>> getAllSpots() {
         List<MushroomSpotGeoJsonDto> dtos = mushroomSpotService.getAllSpots();
         return ResponseEntity.status(HttpStatus.OK).body(dtos);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<MushroomSpotGeoJsonDto> getSpotById(@PathVariable Long id) {
-        MushroomSpotGeoJsonDto dto = mushroomSpotService.getSpotById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @PostMapping

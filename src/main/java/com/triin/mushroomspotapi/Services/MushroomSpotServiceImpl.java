@@ -1,11 +1,11 @@
-package com.triin.mushroom_spots_api.Services;
+package com.triin.mushroomspotapi.Services;
 
-import com.triin.mushroom_spots_api.DTOs.MushroomSpotCreateDto;
-import com.triin.mushroom_spots_api.DTOs.MushroomSpotGeoJsonDto;
-import com.triin.mushroom_spots_api.Entities.MushroomSpot;
-import com.triin.mushroom_spots_api.Exceptions.MushroomSpotEntityNotFoundException;
-import com.triin.mushroom_spots_api.Mappers.MushroomSpotMapper;
-import com.triin.mushroom_spots_api.Repositories.MushroomSpotRepository;
+import com.triin.mushroomspotapi.DTOs.MushroomSpotCreateDto;
+import com.triin.mushroomspotapi.DTOs.MushroomSpotGeoJsonDto;
+import com.triin.mushroomspotapi.Entities.MushroomSpot;
+import com.triin.mushroomspotapi.Exceptions.MushroomSpotEntityNotFoundException;
+import com.triin.mushroomspotapi.Mappers.MushroomSpotMapper;
+import com.triin.mushroomspotapi.Repositories.MushroomSpotRepository;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.triin.mushroom_spots_api.Config;
+package com.triin.mushroomspotapi.Config;
 
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.context.annotation.Bean;

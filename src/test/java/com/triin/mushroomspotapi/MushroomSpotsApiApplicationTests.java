@@ -1,4 +1,4 @@
-package com.triin.mushroom_spots_api;
+package com.triin.mushroomspotapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,7 +1,7 @@
-package com.triin.mushroom_spots_api.Services;
+package com.triin.mushroomspotapi.Services;
 
-import com.triin.mushroom_spots_api.DTOs.MushroomSpotCreateDto;
-import com.triin.mushroom_spots_api.DTOs.MushroomSpotGeoJsonDto;
+import com.triin.mushroomspotapi.DTOs.MushroomSpotCreateDto;
+import com.triin.mushroomspotapi.DTOs.MushroomSpotGeoJsonDto;
 
 import java.util.List;
 

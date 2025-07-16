@@ -1,4 +1,4 @@
-package com.triin.mushroom_spots_api.Exceptions;
+package com.triin.mushroomspotapi.Exceptions;
 
 public class MushroomSpotEntityNotFoundException extends RuntimeException {
 

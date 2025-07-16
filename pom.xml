@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.triin</groupId>
-	<artifactId>mushroom-spots-api</artifactId>
+	<artifactId>MushroomSpotApi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mushroom-spots-api</name>
 	<description>API for mushroom location management</description>
