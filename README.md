@@ -43,16 +43,11 @@ This is a RESTful Spring Boot application for managing mushroom picking spots. S
 
 ### API endpoints
 
-GET /mushroomspots
-Response: `200 OK`
+GET /mushroomspots 
+Response: `200 OK` 
 Returns a list of GeoJSON Feature objects.
 
-GET /mushroomspots/{id}
-Response: `200 OK`
-Returns the retrieved spot in GeoJSON format.
-Error: `404 Not Found` if the spot doesn't exist.
-
-POST /mushroomspots
+POST /mushroomspots 
 Request Body (JSON):
 ```json
 {
@@ -61,11 +56,11 @@ Request Body (JSON):
   "longitude": 26.745
 }
 ```
-Response: `201 Created`
-Returns the created spot in GeoJSON format.
+Response: `201 Created` 
+Returns the created spot in GeoJSON format. 
 Error: `400 Bad Request` if input is invalid.
 
-PUT /mushroomspots/{id}
+PUT /mushroomspots/{id} 
 Request Body (JSON):
 ```json
 {
@@ -74,13 +69,21 @@ Request Body (JSON):
   "longitude": 26.745
 }
 ```
-Response: `200 OK`
-Returns the updated spot in GeoJSON format.
-Error: `400 Bad Request` if input is invalid.
+Response: `200 OK` 
+Returns the updated spot in GeoJSON format. 
+Error: `400 Bad Request` if input is invalid. 
 Error: `404 Not Found` if the spot with given ID doesn't exist.
 
-DELETE /mushroomspots/{id}
-Response: `204 No Content`
+DELETE /mushroomspots/{id} 
+Response: `204 No Content` 
 Error: `404 Not Found` if the spot with given ID doesn't exist.
 
 
+## Frontend
+
+This project includes a simple frontend web map using [Leaflet.js](https://leafletjs.com/) and [OpenStreetMap]
+(https://www.openstreetmap.org/).
+
+- The HTML, JS and CSS files are located in `src/main/resources/static`.
+- The map uses Leaflet via a public CDN (cdnjs).
+- After launching the application, open `http://localhost:8080` in your browser to view the frontend.
