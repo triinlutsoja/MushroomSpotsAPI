@@ -47,13 +47,6 @@ public class MushroomSpotServiceImpl implements MushroomSpotService {
     }
 
     @Override
-    public MushroomSpotGeoJsonDto getSpotById(Long id) {
-        MushroomSpot spot = repository.findById(id)
-                .orElseThrow(() -> new MushroomSpotEntityNotFoundException("MushroomSpotService: Mushroom spot with the id " + id + " not found."));
-        return mapper.toGeoJsonDto(spot);
-    }
-
-    @Override
     public MushroomSpotGeoJsonDto saveSpot(MushroomSpotCreateDto dto) {
         validateSpot(dto);
 

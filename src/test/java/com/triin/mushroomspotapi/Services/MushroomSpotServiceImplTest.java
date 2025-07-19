@@ -1,5 +1,6 @@
 package com.triin.mushroomspotapi.Services;
 
+import com.triin.mushroomspotapi.DTOs.MushroomSpotCreateDto;
 import com.triin.mushroomspotapi.DTOs.MushroomSpotGeoJsonDto;
 import com.triin.mushroomspotapi.Entities.MushroomSpot;
 import com.triin.mushroomspotapi.Mappers.MushroomSpotMapper;
@@ -98,5 +99,90 @@ public class MushroomSpotServiceImplTest {
 
         // Assert
         assertThat(retrievedSpots).isEmpty();
+    }
+
+    @Test
+    void saveSpot_ShouldReturnCorrectDtoWithoutException_WhenSpotIsValid() {
+        // Arrange
+        String description = "New valid mushrooms TEST";
+        Point newPoint = geometryFactory.createPoint(new Coordinate(28.754, 55.534));
+        MushroomSpot newValidSpot = new MushroomSpot(newPoint, description);
+
+        MushroomSpotGeoJsonDto newGeoJsonDto = new MushroomSpotGeoJsonDto();
+        newGeoJsonDto.setGeometry(Map.of("type", "Point","coordinates", newPoint));
+        newGeoJsonDto.setProperties(Map.of("description", description));
+
+        MushroomSpotCreateDto newSpotDto = new MushroomSpotCreateDto();
+        newSpotDto.setDescription(description);
+        newSpotDto.setLongitude(newPoint.getX());
+        newSpotDto.setLatitude(newPoint.getY());
+
+        Mockito.when(mockRepository.save(newValidSpot)).thenReturn(newValidSpot);
+        Mockito.when(mockMapper.dtoToEntity(newSpotDto)).thenReturn(newValidSpot);
+        Mockito.when(mockMapper.toGeoJsonDto(newValidSpot)).thenReturn(newGeoJsonDto);
+
+        // Act
+        MushroomSpotGeoJsonDto savedSpot = mushroomSpotService.saveSpot(newSpotDto);
+
+        // Assert
+        assertThat(savedSpot).isEqualTo(newGeoJsonDto);
+        assertThatCode(() -> mushroomSpotService.saveSpot(newSpotDto))
+                .doesNotThrowAnyException();
+    }
+
+    @Test
+    void saveSpot_ShouldThrowException_WhenSpotDescriptionIsBlank() {
+        // Arrange
+        MushroomSpotCreateDto newSpotDto = new MushroomSpotCreateDto();
+        newSpotDto.setDescription("");
+        newSpotDto.setLongitude(28.754);
+        newSpotDto.setLatitude(55.534);
+
+        // Act & Assert
+        assertThatThrownBy(() -> mushroomSpotService.saveSpot(newSpotDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Description must not be null or blank.");
+    }
+
+    @Test
+    void saveSpot_ShouldThrowException_WhenSpotDescriptionIsNull() {
+        // Arrange
+        MushroomSpotCreateDto newSpotDto = new MushroomSpotCreateDto();
+        newSpotDto.setDescription(null);
+        newSpotDto.setLongitude(28.754);
+        newSpotDto.setLatitude(55.534);
+
+        // Act & Assert
+        assertThatThrownBy(() -> mushroomSpotService.saveSpot(newSpotDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Description must not be null or blank.");
+    }
+
+    @Test
+    void saveSpot_ShouldThrowException_WhenSpotLongitudeIsNull() {
+        // Arrange
+        MushroomSpotCreateDto newSpotDto = new MushroomSpotCreateDto();
+        newSpotDto.setDescription("New valid mushrooms TEST");
+        newSpotDto.setLongitude(null);
+        newSpotDto.setLatitude(55.534);
+
+        // Act & Assert
+        assertThatThrownBy(() -> mushroomSpotService.saveSpot(newSpotDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Both longitude and latitude must be provided.");
+    }
+
+    @Test
+    void saveSpot_ShouldThrowException_WhenSpotLatitudeIsNull() {
+        // Arrange
+        MushroomSpotCreateDto newSpotDto = new MushroomSpotCreateDto();
+        newSpotDto.setDescription("New valid mushrooms TEST");
+        newSpotDto.setLongitude(28.754);
+        newSpotDto.setLatitude(null);
+
+        // Act & Assert
+        assertThatThrownBy(() -> mushroomSpotService.saveSpot(newSpotDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Both longitude and latitude must be provided.");
     }
 }
