@@ -3,6 +3,7 @@ package com.triin.mushroomspotapi.Services;
 import com.triin.mushroomspotapi.DTOs.MushroomSpotCreateDto;
 import com.triin.mushroomspotapi.DTOs.MushroomSpotGeoJsonDto;
 import com.triin.mushroomspotapi.Entities.MushroomSpot;
+import com.triin.mushroomspotapi.Exceptions.MushroomSpotEntityNotFoundException;
 import com.triin.mushroomspotapi.Mappers.MushroomSpotMapper;
 import com.triin.mushroomspotapi.Repositories.MushroomSpotRepository;
 import static org.assertj.core.api.Assertions.*;
@@ -14,10 +15,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.mockito.Mockito;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MushroomSpotServiceImplTest {
 
@@ -44,9 +42,11 @@ public class MushroomSpotServiceImplTest {
         // Set up test objects
         point1 = geometryFactory.createPoint(new Coordinate(27.755, 56.432));
         spot1 = new MushroomSpot(point1, "Magic mushrooms TEST");
+        spot1.setId(1L);
 
         point2 = geometryFactory.createPoint(new Coordinate(27.754, 56.434));
         spot2 = new MushroomSpot(point2, "Freaky mushrooms TEST");
+        spot2.setId(2L);
 
         // Set up test objects' GeoJSON DTOs
         dto1 = new MushroomSpotGeoJsonDto();
@@ -61,18 +61,18 @@ public class MushroomSpotServiceImplTest {
         spotToDtoMap = new HashMap<>();
         spotToDtoMap.put(spot1, dto1);
         spotToDtoMap.put(spot2, dto2);
-
-        Mockito.when(mockMapper.toGeoJsonDto(Mockito.any())).thenAnswer(invocation -> {
-            MushroomSpot arg = invocation.getArgument(0);
-            System.out.println("MAPPER RECEIVED: " + arg.getDescription());
-            return spotToDtoMap.get(arg);
-        });
     }
 
     @Test
     void getAllSpots_ShouldReturnAListOfAllSpots() {
         // Arrange
         Mockito.when(mockRepository.findAll()).thenReturn(List.of(spot1, spot2));
+        Mockito.when(mockMapper.toGeoJsonDto(Mockito.any())).thenAnswer(invocation -> {
+            MushroomSpot arg = invocation.getArgument(0);
+            if (arg == null) return null;
+            System.out.println("MAPPER RECEIVED: " + arg.getDescription());
+            return spotToDtoMap.get(arg);
+        });
 
         // Act
         List<MushroomSpotGeoJsonDto> retrievedSpots = mushroomSpotService.getAllSpots();
@@ -93,6 +93,12 @@ public class MushroomSpotServiceImplTest {
     void getAllSpots_ShouldReturnEmptyList_WhenNoSpotsExist() {
         // Arrange
         Mockito.when(mockRepository.findAll()).thenReturn(Collections.emptyList());
+        Mockito.when(mockMapper.toGeoJsonDto(Mockito.any())).thenAnswer(invocation -> {
+            MushroomSpot arg = invocation.getArgument(0);
+            if (arg == null) return null;
+            System.out.println("MAPPER RECEIVED: " + arg.getDescription());
+            return spotToDtoMap.get(arg);
+        });
 
         // Act
         List<MushroomSpotGeoJsonDto> retrievedSpots = mushroomSpotService.getAllSpots();
@@ -184,5 +190,95 @@ public class MushroomSpotServiceImplTest {
         assertThatThrownBy(() -> mushroomSpotService.saveSpot(newSpotDto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Both longitude and latitude must be provided.");
+    }
+
+    @Test
+    void updateSpot_ShouldUpdate_WhenSpotExistsAndNewSpotDescriptionIsValid() {
+        // Arrange
+        String newDescription = "New description for valid mushrooms TEST";
+
+        MushroomSpotGeoJsonDto newGeoJsonDto = new MushroomSpotGeoJsonDto();
+        newGeoJsonDto.setGeometry(Map.of("type", "Point","coordinates", point1));
+        newGeoJsonDto.setProperties(Map.of("description", newDescription));
+
+        MushroomSpotCreateDto newSpotDto = new MushroomSpotCreateDto();
+        newSpotDto.setDescription(newDescription);
+        newSpotDto.setLongitude(point1.getX());
+        newSpotDto.setLatitude(point1.getY());
+
+        Mockito.when(mockRepository.findById(spot1.getId())).thenReturn(Optional.of(spot1));
+        Mockito.when(mockRepository.save(Mockito.any(MushroomSpot.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Mockito.when(mockMapper.toGeoJsonDto(Mockito.any(MushroomSpot.class))).thenReturn(newGeoJsonDto);
+
+        // Act
+        MushroomSpotGeoJsonDto updatedSpot = mushroomSpotService.updateSpot(spot1.getId(), newSpotDto);
+
+        // Assert
+        assertThat(updatedSpot).isEqualTo(newGeoJsonDto);
+        assertThat(spot1.getDescription()).isEqualTo(newDescription);
+        assertThatCode(() -> mushroomSpotService.updateSpot(spot1.getId(), newSpotDto))
+                .doesNotThrowAnyException();
+    }
+
+    @Test
+    void updateSpot_ShouldThrowException_WhenSpotExistsAndNewSpotDescriptionIsBlank() {
+        // Arrange
+        String newDescription = "";
+
+        MushroomSpotCreateDto newSpotDto = new MushroomSpotCreateDto();
+        newSpotDto.setDescription(newDescription);
+        newSpotDto.setLongitude(point1.getX());
+        newSpotDto.setLatitude(point1.getY());
+
+        Mockito.when(mockRepository.findById(spot1.getId())).thenReturn(Optional.of(spot1));
+
+        // Act & Assert
+        assertThatThrownBy(() -> mushroomSpotService.updateSpot(spot1.getId(), newSpotDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Description must not be null or blank.");
+    }
+
+    @Test
+    void updateSpot_ShouldThrowException_WhenSpotExistsAndNewSpotDescriptionIsNull() {
+        // Arrange
+        String newDescription = null;
+
+        MushroomSpotCreateDto newSpotDto = new MushroomSpotCreateDto();
+        newSpotDto.setDescription(newDescription);
+        newSpotDto.setLongitude(point1.getX());
+        newSpotDto.setLatitude(point1.getY());
+
+        Mockito.when(mockRepository.findById(spot1.getId())).thenReturn(Optional.of(spot1));
+
+        // Act & Assert
+        assertThatThrownBy(() -> mushroomSpotService.updateSpot(spot1.getId(), newSpotDto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Description must not be null or blank.");
+    }
+
+    @Test
+    void updateSpot_ShouldThrowException_WhenSpotDoesNotExist() {
+        // Arrange
+        String newDescription = "New description for valid mushrooms TEST";
+        Long nonExistingId = 3L;
+
+        MushroomSpotGeoJsonDto newGeoJsonDto = new MushroomSpotGeoJsonDto();
+        newGeoJsonDto.setGeometry(Map.of("type", "Point","coordinates", point1));
+        newGeoJsonDto.setProperties(Map.of("description", newDescription));
+
+        MushroomSpotCreateDto newSpotDto = new MushroomSpotCreateDto();
+        newSpotDto.setDescription(newDescription);
+        newSpotDto.setLongitude(point1.getX());
+        newSpotDto.setLatitude(point1.getY());
+
+        Mockito.when(mockRepository.findById(nonExistingId)).thenReturn(Optional.empty());
+        Mockito.when(mockRepository.save(Mockito.any(MushroomSpot.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Mockito.when(mockMapper.toGeoJsonDto(Mockito.any(MushroomSpot.class))).thenReturn(newGeoJsonDto);
+
+        // Act & Assert
+        assertThatThrownBy(() -> mushroomSpotService.updateSpot(nonExistingId, newSpotDto))
+                .isInstanceOf(MushroomSpotEntityNotFoundException.class)
+                .hasMessageContaining("MushroomSpotService: Mushroom spot with " +
+                        "the id " + nonExistingId + " not found.");
     }
 }
