@@ -281,4 +281,32 @@ public class MushroomSpotServiceImplTest {
                 .hasMessageContaining("MushroomSpotService: Mushroom spot with " +
                         "the id " + nonExistingId + " not found.");
     }
+
+    @Test
+    void deleteSpot_ShouldDelete_WhenWhenSpotExists() {
+        //Arrange
+        Long existingId = spot1.getId();
+
+        Mockito.when(mockRepository.existsById(existingId)).thenReturn(true);
+
+        // Act & Assert
+        assertThatCode(() -> mushroomSpotService.deleteSpot(existingId))
+                .doesNotThrowAnyException();
+
+        Mockito.verify(mockRepository).deleteById(existingId);
+
+    }
+
+    @Test
+    void deleteSpot_ShouldDelete_WhenWhenSpotDoesNotExist() {
+        //Arrange
+        Long nonExistingId = 3L;
+
+        Mockito.when(mockRepository.existsById(nonExistingId)).thenReturn(false);
+
+        // Act & Assert
+        assertThatThrownBy(() -> mushroomSpotService.deleteSpot(nonExistingId))
+                .isInstanceOf(MushroomSpotEntityNotFoundException.class)
+                .hasMessageContaining("MushroomSpotService: Mushroom spot with id " + nonExistingId + " not found.");
+    }
 }
