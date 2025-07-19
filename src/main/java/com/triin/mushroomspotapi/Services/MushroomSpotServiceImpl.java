@@ -39,7 +39,7 @@ public class MushroomSpotServiceImpl implements MushroomSpotService {
 
     @Override
     public List<MushroomSpotGeoJsonDto> getAllSpots() {
-        List<MushroomSpot> spots = repository.findAll();  // mul on list entiteid, tuleb dtoks teha
+        List<MushroomSpot> spots = repository.findAll();
 
         return spots.stream()
                 .map(mapper::toGeoJsonDto)

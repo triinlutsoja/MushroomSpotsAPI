@@ -9,6 +9,8 @@ public class MushroomSpotGeoJsonDto {
     private Map<String, Object> geometry;
     private Map<String, Object> properties;
 
+    public MushroomSpotGeoJsonDto(){}
+
     public MushroomSpotGeoJsonDto(Map<String, Object> geometry, Map<String, Object> properties) {
         this.geometry = geometry;
         this.properties = properties;

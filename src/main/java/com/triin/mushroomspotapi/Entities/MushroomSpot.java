@@ -18,6 +18,14 @@ public class MushroomSpot {
 
     private String description;
 
+    public MushroomSpot() {
+    }
+
+    public MushroomSpot(Point coordinates, String description) {
+        this.coordinates = coordinates;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }
@@ -53,13 +61,17 @@ public class MushroomSpot {
 
     @Override
     public final boolean equals(Object o) {
+        if (this == o) return true;
         if (!(o instanceof MushroomSpot that)) return false;
 
-        return Objects.equals(id, that.id);
+        return Objects.equals(coordinates, that.coordinates)
+                && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        int result = Objects.hashCode(coordinates);
+        result = 31 * result + Objects.hashCode(description);
+        return result;
     }
 }

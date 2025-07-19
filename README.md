@@ -87,3 +87,7 @@ This project includes a simple frontend web map using [Leaflet.js](https://leafl
 - The HTML, JS and CSS files are located in `src/main/resources/static`.
 - The map uses Leaflet via a public CDN (cdnjs).
 - After launching the application, open `http://localhost:8080` in your browser to view the frontend.
+
+## Tests
+
+This project includes unit tests for the service layer using Junit and Mockito. The location of test classes: `src/test/java/com/triin/mushroomspotapi`
